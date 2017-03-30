@@ -130,7 +130,7 @@ public class TrackerHub : MonoBehaviour {
 				case 2:
 					if (markerGOs.ContainsKey(id)) {
 						markerGO = markerGOs[id];
-						markerGO.setActive(true);
+						markerGO.gameObject.SetActive(true);
 					} else {
 						MarkerGO markerPrefab = defaultMarkerPrefab;
 						if (markerPrefabDict.ContainsKey(id) && markerPrefabDict[id]) {
@@ -148,7 +148,7 @@ public class TrackerHub : MonoBehaviour {
 				case 3:
 					if (markerGOs.ContainsKey(id)) {
 						markerGO = markerGOs[id];
-						markerGO.setActive(false);
+						markerGO.gameObject.SetActive(false);
 					}
 					break;
 				

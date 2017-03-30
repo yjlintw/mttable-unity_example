@@ -40,7 +40,7 @@ public class MarkerGO : MonoBehaviour {
 		highlight = false;
 	}
 
-	public void setActive(bool value) {
-		isEnabled = value;
-	}
+	// public void setActive(bool value) {
+	// 	isEnabled = value;
+	// }
 }
