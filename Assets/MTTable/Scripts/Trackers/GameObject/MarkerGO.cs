@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 public class MarkerGO : MonoBehaviour {
 
-	[SerializeField]
-	private bool _enabled;
-	public bool isEnabled {
-		private set {
-			_enabled = value;
-		} 
-		get {
-			return _enabled;
-		}
-	}
+	// [SerializeField]
+	// private bool _enabled;
+	// public bool isEnabled {
+	// 	private set {
+	// 		_enabled = value;
+	// 	} 
+	// 	get {
+	// 		return _enabled;
+	// 	}
+	// }
 
 	[SerializeField]
 	private bool _highlight;
@@ -24,12 +24,6 @@ public class MarkerGO : MonoBehaviour {
 	}
 	public Marker marker {
 		set; get;
-	}
-
-	public virtual void Update() {
-		if (!isEnabled) {
-			return;
-		}
 	}
 
 	public void setHighlight() {
