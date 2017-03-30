@@ -67,7 +67,7 @@ namespace SimpleJSON
         public virtual void Add(string aKey, JSONNode aItem){ }
         public virtual JSONNode this[int aIndex]   { get { return null; } set { } }
         public virtual JSONNode this[string aKey]  { get { return null; } set { } }
-        public virtual string Value                { get { return "";   } set { } }
+        public virtual string Value                { get; set; }
         public virtual int Count                   { get { return 0;    } }
  
         public virtual void Add(JSONNode aItem)
@@ -92,7 +92,7 @@ namespace SimpleJSON
  
         public override string ToString()
         {
-            return "JSONNode";
+            return Value;
         }
         public virtual string ToString(string aPrefix)
         {

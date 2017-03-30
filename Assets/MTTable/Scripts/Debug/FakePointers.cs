@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+// using MATT_JSON;
+using SimpleJSON;
 
 
 
@@ -37,45 +39,30 @@ public class FakePointers : MonoBehaviour {
 	}
 
 	private string formulateJSONMessage() {
-		JSONObject alljo = new JSONObject(JSONObject.Type.OBJECT);
+		JSONClass alljo = new JSONClass();
 		// Marker
-		JSONObject mjos = new JSONObject(JSONObject.Type.OBJECT);
+		// JSONObject mjos = new JSONObject(JSONObject.Type.OBJECT);
+		alljo["markers"] = new JSONClass();
 		foreach(MarkerStruct ms in fakeMarkerList) {
-			JSONObject mjo = new JSONObject(JSONObject.Type.OBJECT); 
-			mjo.AddField("id", ms.id);
-			JSONObject po = new JSONObject(JSONObject.Type.OBJECT);
-			po.AddField("x", ms.pos.x);
-			po.AddField("y", ms.pos.y);
-			mjo.AddField("center", po);
-			mjo.AddField("angle", ms.angle);
-			mjo.AddField("action", ms.action);
-			mjos.AddField(ms.id.ToString(), mjo);
+			string id_str = ms.id.ToString();
+			alljo["markers"][id_str] = ms.toJSON();
 		}
-		alljo.AddField("markers", mjos);
 
 
 		// Finger Point
-		
-		JSONObject fjos = new JSONObject(JSONObject.Type.OBJECT);
+		alljo["fingers"] = new JSONClass();
+		// JSONObject fjos = new JSONObject(JSONObject.Type.OBJECT);
 		foreach(FingerStruct fs in fakeFingerList) {
-			JSONObject fjo = new JSONObject(JSONObject.Type.OBJECT);
-			fjo.AddField("id", fs.id);
-			fjo.AddField("x", fs.pos.x);
-			fjo.AddField("y", fs.pos.y);
-			fjo.AddField("action", fs.action);
-			fjos.AddField(fs.id.ToString(), fjo);
+			string id_str = fs.id.ToString();
+			alljo["fingers"][id_str] = fs.toJSON();
 		}
 
 		if (useMouse) {
-			JSONObject fjo = new JSONObject(JSONObject.Type.OBJECT);
-			fjo.AddField("id", mouseFinger.id);
-			fjo.AddField("x", mouseFinger.pos.x);
-			fjo.AddField("y", mouseFinger.pos.y);
-			fjo.AddField("action", mouseFinger.action);
-			fjos.AddField(mouseFinger.id.ToString(), fjo);	
+			string id_str = mouseFinger.id.ToString();
+			alljo["fingers"][id_str] = mouseFinger.toJSON();
 		}
 
-		alljo.AddField("fingers", fjos);	
+		// alljo.AddField("fingers", fjos);	
 
 		return alljo.ToString();
 	}
