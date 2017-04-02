@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEditor.SceneManagement;
 using UnityObject = UnityEngine.Object;
  
 public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
@@ -28,8 +29,10 @@ public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
         foldoutRect.width -= 2 * kButtonWidth;
         EditorGUI.BeginChangeCheck();
         _Foldout = EditorGUI.Foldout(foldoutRect, _Foldout, label, true);
-        if (EditorGUI.EndChangeCheck())
+        if (EditorGUI.EndChangeCheck()) {
             EditorPrefs.SetBool(label.text, _Foldout);
+            // Debug.Log("Changed Fold");
+        }
  
         var buttonRect = position;
         buttonRect.x = position.width - kButtonWidth + position.x;
@@ -37,14 +40,18 @@ public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
  
         if (GUI.Button(buttonRect, new GUIContent("+", "Add item"), EditorStyles.miniButton))
         {
+            Debug.Log("Changed AddNewItem");
             AddNewItem();
+            EditorUtility.SetDirty(property.serializedObject.targetObject);
         }
  
         buttonRect.x -= kButtonWidth;
  
         if (GUI.Button(buttonRect, new GUIContent("X", "Clear dictionary"), EditorStyles.miniButtonRight))
         {
+            // Debug.Log("Changed Clear");
             ClearDictionary();
+            EditorUtility.SetDirty(property.serializedObject.targetObject);
         }
  
         if (!_Foldout)
@@ -64,6 +71,7 @@ public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
             var newKey = DoField(keyRect, typeof(TK), key);
             if (EditorGUI.EndChangeCheck())
             {
+                Debug.Log("Changed Key");
                 try
                 {
                     _Dictionary.Remove(key);
@@ -73,6 +81,7 @@ public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
                 {
                     Debug.Log(e.Message);
                 }
+                EditorUtility.SetDirty(property.serializedObject.targetObject);
                 break;
             }
  
@@ -82,8 +91,10 @@ public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
             EditorGUI.BeginChangeCheck();
             value = DoField(valueRect, typeof(TV), value);
             if (EditorGUI.EndChangeCheck())
-            {
+            {   
+                Debug.Log("Changed Value");
                 _Dictionary[key] = value;
+                EditorUtility.SetDirty(property.serializedObject.targetObject);
                 break;
             }
  
@@ -92,7 +103,9 @@ public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
             removeRect.width = kButtonWidth;
             if (GUI.Button(removeRect, new GUIContent("x", "Remove item"), EditorStyles.miniButtonRight))
             {
+                // Debug.Log("Changed Remove");
                 RemoveItem(key);
+                EditorUtility.SetDirty(property.serializedObject.targetObject);
                 break;
             }
         }

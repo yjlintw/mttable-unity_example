@@ -12,6 +12,11 @@ public class MarkerDictDrawer : DictionaryDrawer<int, MarkerGO> { }
 
 [System.Serializable] public class MarkerDict : SerializableDictionary<int, MarkerGO> { }
 
+[System.Serializable]
+public class IDPrefabMap<T> {
+	int id;
+	T prefab;
+}
 
 public class TrackerHub : MonoBehaviour {
 	public Funnel.Funnel funnel;
@@ -29,14 +34,14 @@ public class TrackerHub : MonoBehaviour {
 	public MarkerDict markerPrefabDict;
 	public bool simulation = false;
 	public string fakeMsg;
-
-	// public MarkerGO activeMarker;
-
-	// private bool waitSpeech = false;
-	// float lastUpdateTime;
-	const float CLEARTIME = 0.5f;
-
 	
+	public MarkerGO activeMarker;
+
+	// float lastUpdateTime;
+	// const float CLEARTIME = 0.5f;
+
+	// For Debug
+	private bool hotwordflag = false;
 	// Use this for initialization
 	void Start () {
 		fingerPoints = new Dictionary<int, FingerUI>();
@@ -64,11 +69,11 @@ public class TrackerHub : MonoBehaviour {
 			}
 		}
 
-		// if (waitSpeech) {
-		// 	Camera.main.backgroundColor = new Color32(200, 100, 100, 255);
-		// } else {
-		// 	Camera.main.backgroundColor = new Color32(0, 0, 0, 255);
-		// }
+		// Debug
+		if (Input.GetKeyDown(KeyCode.H)) {
+			hotwordflag = !hotwordflag;
+			setHotword(hotwordflag);
+		}
 	}
 	void updateFingers(JSONClass fingers) {
 		foreach (string k in fingers.keys) {
@@ -175,29 +180,24 @@ public class TrackerHub : MonoBehaviour {
 		fingerPoints.Clear();
 	}
 
-/** Code below should be moved to a different module **/
-	// public void setActiveMarker(int id) {
-	// 	MarkerGO go = markerGOs[id];
-	// 	if (go != null) {
-	// 		activeMarker = go;
-	// 		activeMarker.setHighlight();
-	// 	}
-	// }
+	public void setActiveMarker(int id) {
+		MarkerGO go = markerGOs[id];
+		if (go != null) {
+			activeMarker = go;
+			activeMarker.setHighlight();
+		}
+	}
 
-	// public void removeActiveMarker() {
-	// 	if (activeMarker) {
-	// 		activeMarker.unsetHighlight();
-	// 		activeMarker = null;
-	// 	}
-	// }
+	public void removeActiveMarker() {
+		if (activeMarker) {
+			activeMarker.unsetHighlight();
+			activeMarker = null;
+		}
+	}
 
-	// public void setHotword() {
-	// 	waitSpeech = true;
-	// }
-
-	// public void unsetHotword() {
-	// 	waitSpeech = false;
-	// }
+	public void setHotword(bool value) {
+		Messenger.Broadcast<bool>(TrackerHubEvent.HOT_WORDS, value);
+	}
 }
 
 
